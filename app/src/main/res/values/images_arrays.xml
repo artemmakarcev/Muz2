@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="images">
+        <item>@drawable/close</item>
+
+        <item>@drawable/done</item>
+    </string-array>
+
+</resources>
