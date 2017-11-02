@@ -11,16 +11,16 @@ import java.util.Date;
 public class ObjectItem {
 
     private Integer id;
+    private String title;
+    private String description;
+    private Drawable image;
+
 
     public ObjectItem(Integer id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
     }
-
-    private String title;
-    private String description;
-    private Drawable image;
 
 //    public ObjectItem(String title, String date, Drawable image) {
 //        this.title = date;
