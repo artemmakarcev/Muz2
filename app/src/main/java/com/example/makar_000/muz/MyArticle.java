@@ -9,7 +9,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -28,8 +30,9 @@ import static com.example.makar_000.muz.R.string.large_text;
 
 public class MyArticle extends AppCompatActivity {
 
-    private TextView textView;
+    String intentId;
     private ArrayList<ObjectItem> objectItems = new ArrayList<ObjectItem>();
+    WebView mWebViewDescription, mWebViewImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +41,26 @@ public class MyArticle extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(MyListView.EXTRA_MESSAGE);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+//        Intent intent = getIntent();
+//        intentId = intent.getIntExtra("itemIndex", 1);
+            intentId = extras.getString("id", "1");
 
-        textView = (TextView) findViewById(R.id.about);
-        textView.setText(message);
+            Log.i("test", String.valueOf(extras.getString("id", "1")));
+
+            mWebViewDescription = (WebView) findViewById(R.id.webView);
+            mWebViewDescription.loadUrl("http://itmuseum.shspu.ru/?p=view&id=" + intentId);
+        }
+        mWebViewDescription.getSettings().setLoadWithOverviewMode(true);
+        mWebViewDescription.getSettings().setUseWideViewPort(true);
+
+        mWebViewImage = (WebView) findViewById(R.id.imageTitle);
+        mWebViewImage.loadUrl("http://itmuseum.shspu.ru/images/article/thumbnail/10:07:57_toshtop.jpg");
+
+        mWebViewImage.getSettings().setLoadWithOverviewMode(true);
+        mWebViewImage.getSettings().setUseWideViewPort(true);
+
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {

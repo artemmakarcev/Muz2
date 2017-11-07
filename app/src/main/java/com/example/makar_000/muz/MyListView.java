@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -25,13 +26,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MyListView extends Activity {
+public class MyListView extends AppCompatActivity {
 
     private ListView listView;
     private MyAdapter adapter;
     private TypedArray images;
-    private static long back_pressed;
-    public final static String EXTRA_MESSAGE = "EXTRA_MESSAGE";
     private ArrayList<ObjectItem> objectItems = new ArrayList<ObjectItem>();
 
     @Override
@@ -56,62 +55,19 @@ public class MyListView extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Intent intent = new Intent(MyListView.this, MyArticle.class);
-
-//                String message = adapter.getItem(position).toString();
-                // Добавляем с помощью свойства putExtra объект - первый параметр - ключ,
-                // второй параметр - значение этого объекта
-//                intent.putExtra(EXTRA_MESSAGE, message);
-
+                intent.putExtra("id", adapter.getItem(position));
+//                intent.putExtra("urlImage", adapter.get)
                 startActivity(intent);
+
 //                Toast.makeText(getApplicationContext(), adapter.getItem(position).toString(),
+//                Toast.makeText(getApplicationContext(), adapter.getItem(position),
 //                        Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-
-//    // Этот медот будет инициализировать список даных для ListView
-//    private ArrayList<ObjectItem> initData() {
-//        // ObjectItem это наш POJO объект который мы ниже разберем.
-//        // Даный список будет возвращаться для заполнения LIstView
-//        ArrayList<ObjectItem> maps = new ArrayList<ObjectItem>();
-//
-//
-//
-////        for (int a = 1; a < 101; a++) {
-////
-////            ObjectItem objectItema = new ObjectItem("Title "+ a ,
-////                    "Description " + a + " Краткое описание экспоната в музее",
-////                    images.getDrawable(IMGEnum.NOTDONE.index()));
-////
-////            maps.add(objectItema);
-////
-////        }
-//
-////        ObjectItem objectItem1 = new ObjectItem("Test 1",
-////                GregorianCalendar.getInstance().getTime(),
-////                images.getDrawable(IMGEnum.DONE.index()));
-////
-////        maps.add(objectItem1);
-////
-////        ObjectItem objectItem2 = new ObjectItem("Test 2",
-////                GregorianCalendar.getInstance().getTime(),
-////                images.getDrawable(IMGEnum.NOTDONE.index()));
-////
-////        maps.add(objectItem2);
-////
-//        return maps;
-//    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if (back_pressed + 3000 > System.currentTimeMillis()) super.onBackPressed();
-        else
-            Toast.makeText(getBaseContext(), "Для выхода нажмите ещё назад", Toast.LENGTH_SHORT).show();
-        back_pressed = System.currentTimeMillis();
-    }
 
     private class GetClass extends AsyncTask<String, Void, Void> {
 
@@ -134,37 +90,30 @@ public class MyListView extends Activity {
         protected Void doInBackground(String... params) {
             try {
 
-                URL url = new URL("http://itmuseum.shspu.ru/api/4");
+                URL url = new URL("http://itmuseum.shspu.ru/api/getArticles.php");
 //
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//                String urlParameters = "fizz=buzz";
                 connection.setRequestMethod("GET");
-                connection.setRequestProperty("USER-AGENT", "Mozilla/5.0");
-                connection.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
+                connection.connect();
 
                 int responseCode = connection.getResponseCode();
-//                System.out.println("\nSending 'POST' request to URL : " + url);
-//                System.out.println("Post parameters : " + urlParameters);
                 System.out.println("Response Code : " + responseCode);
-                final StringBuilder output = new StringBuilder();//"Request URL " + url
-                //output.append(System.getProperty("line.separator") + "Request Parameters " + urlParameters);
-//                output.append(System.getProperty("line.separator")  + "Response Code " + responseCode);
-//                output.append(System.getProperty("line.separator")  + "Type " + "GET");
+
                 BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line;
-                StringBuilder responseOutput = new StringBuilder();
-                System.out.println("output===============" + br);
+                System.out.println(br);
+
+                StringBuilder builder = new StringBuilder();
                 while ((line = br.readLine()) != null) {
-                    responseOutput.append(line + "\n");
+                    builder.append(line);
                 }
                 br.close();
 
-                output.append(responseOutput.toString());//+ "Response "
-//                output.append(System.getProperty("line.separator") + System.getProperty("line.separator") + System.getProperty("line.separator") + responseOutput.toString());//+ "Response "
+                builder.append(builder.toString());
 
-                System.out.println(output);
+                System.out.println(builder);
                 try {
-                    JSONArray arr = new JSONArray(output.toString());
+                    JSONArray arr = new JSONArray(builder.toString());
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject object = arr.getJSONObject(i);
 //                        if (object.has("id")) {
@@ -172,20 +121,15 @@ public class MyListView extends Activity {
 //                            object.getString("title");
 //                            object.getString("description");
 //                        }
-                        objectItems.add(new ObjectItem(object.getInt("id"), object.getString("title"), object.getString("description")));
+                        objectItems.add(new ObjectItem(object.getString("id"), object.getString("title"), object.getString("category"), object.getString("description"), object.getString("image")));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-//                        outputView.setText(output);
-                progressDialog.dismiss();
-
             } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             return null;

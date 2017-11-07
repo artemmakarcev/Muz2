@@ -22,11 +22,22 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/done"
-                android:scaleType="centerCrop"/>
+            <WebView
+                android:id="@+id/imageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center"
+                android:background="@color/colorPrimary">
+
+            </WebView>
+
+            <!--<ImageView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:src="@drawable/done"-->
+                <!--android:scaleType="centerCrop"/>-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
