@@ -8,11 +8,16 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +35,6 @@ public class MyListView extends AppCompatActivity {
 
     private ListView listView;
     private MyAdapter adapter;
-    private TypedArray images;
     private ArrayList<ObjectItem> objectItems = new ArrayList<ObjectItem>();
 
     @Override
@@ -38,14 +42,21 @@ public class MyListView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
         // Инициализируем изображения с помощью ресурса изображений
         // данный ресурс будет рассмотрен ниже
         Resources res = getResources();
-        images = res.obtainTypedArray(R.array.images);
 
         listView = (ListView) findViewById(R.id.list);
 
-        // инициализация нашего адаптера
         adapter = new MyAdapter(this, new ArrayList<ObjectItem>());
         listView.setAdapter(adapter);
 
@@ -55,10 +66,9 @@ public class MyListView extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 Intent intent = new Intent(MyListView.this, MyArticle.class);
                 intent.putExtra("id", adapter.getItem(position));
-//                intent.putExtra("urlImage", adapter.get)
+                intent.putExtra("urlImage", adapter.getUrlImage(position));
                 startActivity(intent);
 
 //                Toast.makeText(getApplicationContext(), adapter.getItem(position).toString(),
@@ -79,7 +89,6 @@ public class MyListView extends AppCompatActivity {
         }
 
         protected void onPreExecute() {
-//            ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
             progressDialog.setTitle("Please wait");
             progressDialog.setMessage("Loading");
             progressDialog.show();
@@ -116,11 +125,6 @@ public class MyListView extends AppCompatActivity {
                     JSONArray arr = new JSONArray(builder.toString());
                     for (int i = 0; i < arr.length(); i++) {
                         JSONObject object = arr.getJSONObject(i);
-//                        if (object.has("id")) {
-//                            object.getInt("id");
-//                            object.getString("title");
-//                            object.getString("description");
-//                        }
                         objectItems.add(new ObjectItem(object.getString("id"), object.getString("title"), object.getString("category"), object.getString("description"), object.getString("image")));
                     }
                 } catch (JSONException e) {

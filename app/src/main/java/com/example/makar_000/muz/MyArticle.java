@@ -1,38 +1,23 @@
 package com.example.makar_000.muz;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
-import android.view.View;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.squareup.picasso.Picasso;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-
-import static com.example.makar_000.muz.R.string.large_text;
 
 public class MyArticle extends AppCompatActivity {
 
     String intentId;
     private ArrayList<ObjectItem> objectItems = new ArrayList<ObjectItem>();
-    WebView mWebViewDescription, mWebViewImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +32,30 @@ public class MyArticle extends AppCompatActivity {
 //        intentId = intent.getIntExtra("itemIndex", 1);
             intentId = extras.getString("id", "1");
 
+
             Log.i("test", String.valueOf(extras.getString("id", "1")));
 
-            mWebViewDescription = (WebView) findViewById(R.id.webView);
-            mWebViewDescription.loadUrl("http://itmuseum.shspu.ru/?p=view&id=" + intentId);
+            TextView textHtml = (TextView) findViewById(R.id.textHtml);
+
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                textHtml.setText(Html.fromHtml("<p><strong>Компью́тер</strong>&nbsp;(<a href=\\\"https://ru.wikipedia.org/wiki/%D0%90%D0%BD%D0%B3%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9_%D1%8F%D0%B7%D1%8B%D0%BA\\\" title=\\\"Английский язык\\\">англ.</a>&nbsp;<em>computer</em>,&nbsp;<small>МФА:</small>&nbsp;<a href=\\\"https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D0%B4%D1%83%D0%BD%D0%B0%D1%80%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9_%D1%84%D0%BE%D0%BD%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%B0%D0%BB%D1%84%D0%B0%D0%B2%D0%B8%D1%82\\\" title=\\\"Международный фонетический алфавит\\\">[kəmˈpjuː.tə(ɹ)]</a><sup><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80#cite_note-1\\\">[1]</a></sup>&nbsp;&mdash; &laquo;вычислитель&raquo;)&nbsp;&mdash; устройство или система, способная выполнять заданную, чётко определённую, изменяемую последовательность операций. Это чаще всего операции численных расчётов и манипулирования данными, однако сюда относятся и операции&nbsp;<a href=\\\"https://ru.wikipedia.org/wiki/%D0%92%D0%B2%D0%BE%D0%B4-%D0%B2%D1%8B%D0%B2%D0%BE%D0%B4\\\" title=\\\"Ввод-вывод\\\">ввода-вывода</a>. Описание последовательности операций называется&nbsp;<em><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80%D0%BD%D0%B0%D1%8F_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0\\\" title=\\\"Компьютерная программа\\\">программой</a></em><sup><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80#cite_note-2\\\">[2]</a></sup>.</p>\\n", Html.FROM_HTML_MODE_LEGACY));
+//            } else {
+//                textHtml.setText(Html.fromHtml("<p><strong>Компью́тер</strong>&nbsp;(<a href=\\\"https://ru.wikipedia.org/wiki/%D0%90%D0%BD%D0%B3%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9_%D1%8F%D0%B7%D1%8B%D0%BA\\\" title=\\\"Английский язык\\\">англ.</a>&nbsp;<em>computer</em>,&nbsp;<small>МФА:</small>&nbsp;<a href=\\\"https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D0%B4%D1%83%D0%BD%D0%B0%D1%80%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9_%D1%84%D0%BE%D0%BD%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%B0%D0%BB%D1%84%D0%B0%D0%B2%D0%B8%D1%82\\\" title=\\\"Международный фонетический алфавит\\\">[kəmˈpjuː.tə(ɹ)]</a><sup><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80#cite_note-1\\\">[1]</a></sup>&nbsp;&mdash; &laquo;вычислитель&raquo;)&nbsp;&mdash; устройство или система, способная выполнять заданную, чётко определённую, изменяемую последовательность операций. Это чаще всего операции численных расчётов и манипулирования данными, однако сюда относятся и операции&nbsp;<a href=\\\"https://ru.wikipedia.org/wiki/%D0%92%D0%B2%D0%BE%D0%B4-%D0%B2%D1%8B%D0%B2%D0%BE%D0%B4\\\" title=\\\"Ввод-вывод\\\">ввода-вывода</a>. Описание последовательности операций называется&nbsp;<em><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80%D0%BD%D0%B0%D1%8F_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0\\\" title=\\\"Компьютерная программа\\\">программой</a></em><sup><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80#cite_note-2\\\">[2]</a></sup>.</p>\\n"));
+//            }
+
+            textHtml.setText(extras.getString("id", "1") + " | " + extras.getString("urlImage", "2"));
+
+
         }
-        mWebViewDescription.getSettings().setLoadWithOverviewMode(true);
-        mWebViewDescription.getSettings().setUseWideViewPort(true);
 
-        mWebViewImage = (WebView) findViewById(R.id.imageTitle);
-        mWebViewImage.loadUrl("http://itmuseum.shspu.ru/images/article/thumbnail/10:07:57_toshtop.jpg");
+        ImageView imageView = (ImageView) findViewById(R.id.mainImage);
 
-        mWebViewImage.getSettings().setLoadWithOverviewMode(true);
-        mWebViewImage.getSettings().setUseWideViewPort(true);
+        Picasso.with(MyArticle.this)
+                .load("http://itmuseum.shspu.ru/images/article/thumbnail/" + extras.getString("urlImage", "2"))
+//                .load("http://itmuseum.shspu.ru/images/article/" + extras.getString("urlImage", "2"))
+//                .resize(200, 200)
+//                .centerCrop()
+                .into(imageView, null);
 
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
