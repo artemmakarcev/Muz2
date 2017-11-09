@@ -1,6 +1,8 @@
 package com.example.makar_000.muz;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,7 @@ public class MyAdapter extends ArrayAdapter<String> {
     public List<ObjectItem> data;
     private Context context;
 
-    public MyAdapter(Context context, List<ObjectItem> data) {
+    MyAdapter(Context context, List<ObjectItem> data) {
         super(context, R.layout.my_listview);
         this.data = data;
         this.context = context;
@@ -33,7 +35,7 @@ public class MyAdapter extends ArrayAdapter<String> {
         return data.get(position).getId();
     }
 
-    public String getUrlImage(int position) {
+    String getUrlImage(int position) {
         return data.get(position).getImage();
     }
 
@@ -43,10 +45,12 @@ public class MyAdapter extends ArrayAdapter<String> {
     }
 
     // заполнение элементов списка
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.my_listview, parent, false);
+        assert inflater != null;
+        @SuppressLint("ViewHolder") View view = inflater.inflate(R.layout.my_listview, parent, false);
 
         // проставляем данные для элементов
         TextView title = (TextView) view.findViewById(R.id.title);

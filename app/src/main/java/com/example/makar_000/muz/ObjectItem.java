@@ -1,13 +1,5 @@
 package com.example.makar_000.muz;
 
-/**
- * Created by makar_000 on 13.04.2017.
- */
-
-import android.graphics.drawable.Drawable;
-
-import java.util.Date;
-import java.util.Map;
 
 public class ObjectItem {
 

@@ -1,11 +1,8 @@
 package com.example.makar_000.muz;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,11 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,9 +26,8 @@ import java.util.ArrayList;
 
 public class MyListView extends AppCompatActivity {
 
-    private ListView listView;
     private MyAdapter adapter;
-    private ArrayList<ObjectItem> objectItems = new ArrayList<ObjectItem>();
+    private ArrayList<ObjectItem> objectItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +45,13 @@ public class MyListView extends AppCompatActivity {
 
         // Инициализируем изображения с помощью ресурса изображений
         // данный ресурс будет рассмотрен ниже
-        Resources res = getResources();
 
-        listView = (ListView) findViewById(R.id.list);
+        ListView listView = (ListView) findViewById(R.id.list);
 
         adapter = new MyAdapter(this, new ArrayList<ObjectItem>());
         listView.setAdapter(adapter);
 
-        new GetClass(MyListView.this).execute();
+        new GetClass().execute();
 
         // По клику будем выводить текст элемента
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,14 +70,10 @@ public class MyListView extends AppCompatActivity {
     }
 
 
+    @SuppressLint("StaticFieldLeak")
     private class GetClass extends AsyncTask<String, Void, Void> {
 
-        private final Context context;
         ProgressDialog progressDialog = new ProgressDialog(MyListView.this);
-
-        public GetClass(Context c) {
-            this.context = c;
-        }
 
         protected void onPreExecute() {
             progressDialog.setTitle("Please wait");

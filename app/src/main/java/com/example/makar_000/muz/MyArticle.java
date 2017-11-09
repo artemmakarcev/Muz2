@@ -1,24 +1,20 @@
 package com.example.makar_000.muz;
 
-import android.os.Build;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
 public class MyArticle extends AppCompatActivity {
 
     String intentId;
-    private ArrayList<ObjectItem> objectItems = new ArrayList<ObjectItem>();
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +46,7 @@ public class MyArticle extends AppCompatActivity {
 
         ImageView imageView = (ImageView) findViewById(R.id.mainImage);
 
+        assert extras != null;
         Picasso.with(MyArticle.this)
                 .load("http://itmuseum.shspu.ru/images/article/thumbnail/" + extras.getString("urlImage", "2"))
 //                .load("http://itmuseum.shspu.ru/images/article/" + extras.getString("urlImage", "2"))
