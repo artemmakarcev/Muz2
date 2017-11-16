@@ -1,18 +1,32 @@
 package com.example.makar_000.muz;
 
 import android.annotation.SuppressLint;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class MyArticle extends AppCompatActivity {
 
     String intentId;
+    TextView textHtml;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -28,20 +42,18 @@ public class MyArticle extends AppCompatActivity {
 //        intentId = intent.getIntExtra("itemIndex", 1);
             intentId = extras.getString("id", "1");
 
+            toolbar.setTitle(extras.getString("nameTitle"));
+            toolbar.setSubtitle("title");
+
 
             Log.i("test", String.valueOf(extras.getString("id", "1")));
+            Log.i("test", String.valueOf(extras.getString("nameTitle", "Статья")));
 
             TextView textHtml = (TextView) findViewById(R.id.textHtml);
 
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                textHtml.setText(Html.fromHtml("<p><strong>Компью́тер</strong>&nbsp;(<a href=\\\"https://ru.wikipedia.org/wiki/%D0%90%D0%BD%D0%B3%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9_%D1%8F%D0%B7%D1%8B%D0%BA\\\" title=\\\"Английский язык\\\">англ.</a>&nbsp;<em>computer</em>,&nbsp;<small>МФА:</small>&nbsp;<a href=\\\"https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D0%B4%D1%83%D0%BD%D0%B0%D1%80%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9_%D1%84%D0%BE%D0%BD%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%B0%D0%BB%D1%84%D0%B0%D0%B2%D0%B8%D1%82\\\" title=\\\"Международный фонетический алфавит\\\">[kəmˈpjuː.tə(ɹ)]</a><sup><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80#cite_note-1\\\">[1]</a></sup>&nbsp;&mdash; &laquo;вычислитель&raquo;)&nbsp;&mdash; устройство или система, способная выполнять заданную, чётко определённую, изменяемую последовательность операций. Это чаще всего операции численных расчётов и манипулирования данными, однако сюда относятся и операции&nbsp;<a href=\\\"https://ru.wikipedia.org/wiki/%D0%92%D0%B2%D0%BE%D0%B4-%D0%B2%D1%8B%D0%B2%D0%BE%D0%B4\\\" title=\\\"Ввод-вывод\\\">ввода-вывода</a>. Описание последовательности операций называется&nbsp;<em><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80%D0%BD%D0%B0%D1%8F_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0\\\" title=\\\"Компьютерная программа\\\">программой</a></em><sup><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80#cite_note-2\\\">[2]</a></sup>.</p>\\n", Html.FROM_HTML_MODE_LEGACY));
-//            } else {
-//                textHtml.setText(Html.fromHtml("<p><strong>Компью́тер</strong>&nbsp;(<a href=\\\"https://ru.wikipedia.org/wiki/%D0%90%D0%BD%D0%B3%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9_%D1%8F%D0%B7%D1%8B%D0%BA\\\" title=\\\"Английский язык\\\">англ.</a>&nbsp;<em>computer</em>,&nbsp;<small>МФА:</small>&nbsp;<a href=\\\"https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D0%B4%D1%83%D0%BD%D0%B0%D1%80%D0%BE%D0%B4%D0%BD%D1%8B%D0%B9_%D1%84%D0%BE%D0%BD%D0%B5%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D0%B0%D0%BB%D1%84%D0%B0%D0%B2%D0%B8%D1%82\\\" title=\\\"Международный фонетический алфавит\\\">[kəmˈpjuː.tə(ɹ)]</a><sup><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80#cite_note-1\\\">[1]</a></sup>&nbsp;&mdash; &laquo;вычислитель&raquo;)&nbsp;&mdash; устройство или система, способная выполнять заданную, чётко определённую, изменяемую последовательность операций. Это чаще всего операции численных расчётов и манипулирования данными, однако сюда относятся и операции&nbsp;<a href=\\\"https://ru.wikipedia.org/wiki/%D0%92%D0%B2%D0%BE%D0%B4-%D0%B2%D1%8B%D0%B2%D0%BE%D0%B4\\\" title=\\\"Ввод-вывод\\\">ввода-вывода</a>. Описание последовательности операций называется&nbsp;<em><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80%D0%BD%D0%B0%D1%8F_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B0\\\" title=\\\"Компьютерная программа\\\">программой</a></em><sup><a href=\\\"https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80#cite_note-2\\\">[2]</a></sup>.</p>\\n"));
-//            }
+//            textHtml.setText(extras.getString("id", "1") + " | " + extras.getString("urlImage", "2"));
 
-            textHtml.setText(extras.getString("id", "1") + " | " + extras.getString("urlImage", "2"));
-
-
+            new GetClass().execute();
         }
 
         ImageView imageView = (ImageView) findViewById(R.id.mainImage);
@@ -64,4 +76,87 @@ public class MyArticle extends AppCompatActivity {
 //            }
 //        });
     }
+
+    @SuppressLint("StaticFieldLeak")
+    private class GetClass extends AsyncTask<String, Void, String> {
+
+        //        ProgressDialog progressDialog = new ProgressDialog(MyArticle.this);
+        String resultJson = "";
+
+        protected void onPreExecute() {
+//            progressDialog.setTitle("Please wait");
+//            progressDialog.setMessage("Loading");
+//            progressDialog.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                URL url = new URL("http://itmuseum.shspu.ru/api/getArticle.php?id=" + intentId);
+//
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+
+                int responseCode = connection.getResponseCode();
+                System.out.println("Response Code : " + responseCode);
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                System.out.println(br);
+
+                StringBuilder builder = new StringBuilder();
+                while ((line = br.readLine()) != null) {
+                    builder.append(line);
+                }
+                br.close();
+
+                builder.append(builder.toString());
+                resultJson = builder.toString();
+                System.out.println(builder);
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return resultJson;
+        }
+
+        @Override
+        protected void onPostExecute(String strJson) {
+            super.onPostExecute(strJson);
+
+            try {
+                JSONObject jsonAll;
+                jsonAll = new JSONObject(strJson);
+
+                String text = jsonAll.getString("text");
+
+                Log.i("JSON", text);
+
+                TextView textHtml = (TextView) findViewById(R.id.textHtml);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    textHtml.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
+                } else {
+                    textHtml.setText(Html.fromHtml(text));
+                }
+
+
+//                textHtml.setText("123");
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//            progressDialog.dismiss();
+        }
+
+    }
+
 }

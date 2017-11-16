@@ -8,16 +8,10 @@
     tools:context="com.example.makar_000.muz.MyArticle"
     tools:showIn="@layout/my_article">
 
-<!--<WebView-->
-    <!--android:id="@+id/webView"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content">-->
-
-<!--</WebView>-->
-
     <TextView
         android:id="@+id/textHtml"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="5dp" />
 
 </android.support.v4.widget.NestedScrollView>

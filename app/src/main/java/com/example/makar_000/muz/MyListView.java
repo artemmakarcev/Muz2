@@ -60,6 +60,7 @@ public class MyListView extends AppCompatActivity {
                 Intent intent = new Intent(MyListView.this, MyArticle.class);
                 intent.putExtra("id", adapter.getItem(position));
                 intent.putExtra("urlImage", adapter.getUrlImage(position));
+                intent.putExtra("nameTitle", adapter.getNameTitle(position));
                 startActivity(intent);
 
 //                Toast.makeText(getApplicationContext(), adapter.getItem(position).toString(),
@@ -71,7 +72,7 @@ public class MyListView extends AppCompatActivity {
 
 
     @SuppressLint("StaticFieldLeak")
-    private class GetClass extends AsyncTask<String, Void, Void> {
+    public class GetClass extends AsyncTask<String, Void, Void> {
 
         ProgressDialog progressDialog = new ProgressDialog(MyListView.this);
 

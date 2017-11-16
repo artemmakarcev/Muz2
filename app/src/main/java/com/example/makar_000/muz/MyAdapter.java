@@ -38,6 +38,9 @@ public class MyAdapter extends ArrayAdapter<String> {
     String getUrlImage(int position) {
         return data.get(position).getImage();
     }
+    String getNameTitle(int position) {
+        return data.get(position).getTitle();
+    }
 
     @Override
     public long getItemId(int position) {
