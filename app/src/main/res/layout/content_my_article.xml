@@ -8,6 +8,8 @@
     tools:context="com.example.makar_000.muz.MyArticle"
     tools:showIn="@layout/my_article">
 
+
+
     <TextView
         android:id="@+id/textHtml"
         android:layout_width="match_parent"

@@ -33,8 +33,8 @@ public class MyArticle extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_article);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -42,14 +42,17 @@ public class MyArticle extends AppCompatActivity {
 //        intentId = intent.getIntExtra("itemIndex", 1);
             intentId = extras.getString("id", "1");
 
-            toolbar.setTitle(extras.getString("nameTitle"));
-            toolbar.setSubtitle("title");
+//            toolbar.setTitle(extras.getString("nameTitle"));
+//            toolbar.setSubtitle("title");
 
 
             Log.i("test", String.valueOf(extras.getString("id", "1")));
             Log.i("test", String.valueOf(extras.getString("nameTitle", "Статья")));
 
             TextView textHtml = (TextView) findViewById(R.id.textHtml);
+            TextView nameArticle = (TextView) findViewById(R.id.nameArticle);
+
+            nameArticle.setText(extras.getString("nameTitle"));
 
 //            textHtml.setText(extras.getString("id", "1") + " | " + extras.getString("urlImage", "2"));
 

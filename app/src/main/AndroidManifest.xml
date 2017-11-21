@@ -21,8 +21,8 @@
         </activity>
         <activity
             android:name=".MyArticle"
-            android:label="Загрузка названия..."
+            android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
-
+    <!--android:label="Загрузка названия..."-->
 </manifest>
