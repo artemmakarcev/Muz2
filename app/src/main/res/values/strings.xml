@@ -90,8 +90,9 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="action_settings">Test</string>
+    <string name="action_settings">Настройка</string>
     <string name="title">Title</string>
     <string name="category">Category</string>
     <string name="description">Description</string>
+    <string name="action_refresh">Обновить</string>
 </resources>

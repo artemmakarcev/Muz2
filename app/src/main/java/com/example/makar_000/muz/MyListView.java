@@ -1,16 +1,23 @@
 package com.example.makar_000.muz;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +33,8 @@ import java.util.ArrayList;
 
 public class MyListView extends AppCompatActivity {
 
+    ConnectionDetector cd;
+    Boolean isInternetPresent = false;
     private MyAdapter adapter;
     private ArrayList<ObjectItem> objectItems = new ArrayList<>();
 
@@ -43,15 +52,23 @@ public class MyListView extends AppCompatActivity {
             }
         });
 
-        // Инициализируем изображения с помощью ресурса изображений
-        // данный ресурс будет рассмотрен ниже
-
         ListView listView = (ListView) findViewById(R.id.list);
 
         adapter = new MyAdapter(this, new ArrayList<ObjectItem>());
         listView.setAdapter(adapter);
 
-        new GetClass().execute();
+        cd = new ConnectionDetector(getApplicationContext());
+        isInternetPresent = cd.ConnectingToInternet();
+
+        if (isInternetPresent) {
+            new GetClass().execute();
+//            showAlertDialog(MyListView.this, "Интернет соединение",
+//                    "У вас есть Интернет соединение", true);
+        } else {
+            showAlertDialog(MyListView.this, "Интернет соединение отсутствует",
+                    "Включитете WiFi или мобильный интернет", false);
+        }
+
 
         // По клику будем выводить текст элемента
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,6 +87,51 @@ public class MyListView extends AppCompatActivity {
         });
     }
 
+    public void showAlertDialog(Context context, String title, String message, Boolean status) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        //Настраиваем иконки, можете выбрать другие или добавить свои (мне лень):
+//        alertDialog.setIcon((status) ? R.drawable.ic_launcher : R.drawable.ic_launcher);
+        alertDialog.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                new GetClass().execute();
+                finish();
+            }
+        });
+        alertDialog.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+//        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void onRefreshMenuClick(MenuItem item) {
+        new GetClass().execute();
+    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // получим идентификатор выбранного пункта меню
+//        int id = item.getItemId();
+//
+//        // Операции для выбранного пункта меню
+//        switch (id) {
+//            case R.id.action_settings:
+////                infoTextView.setText("Вы выбрали кота!");
+//                return true;
+//            case R.id.action_update:
+//                new GetClass().execute();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     @SuppressLint("StaticFieldLeak")
     public class GetClass extends AsyncTask<String, Void, Void> {
@@ -77,10 +139,8 @@ public class MyListView extends AppCompatActivity {
         ProgressDialog progressDialog = new ProgressDialog(MyListView.this);
 
         protected void onPreExecute() {
-            progressDialog.setTitle("Please wait");
-            progressDialog.setMessage("Loading");
+            progressDialog.setMessage("Зарузка");
             progressDialog.show();
-
         }
 
         @Override

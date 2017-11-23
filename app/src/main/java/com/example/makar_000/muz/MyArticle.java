@@ -1,6 +1,7 @@
 package com.example.makar_000.muz;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -83,13 +84,13 @@ public class MyArticle extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     private class GetClass extends AsyncTask<String, Void, String> {
 
-        //        ProgressDialog progressDialog = new ProgressDialog(MyArticle.this);
+                ProgressDialog progressDialog = new ProgressDialog(MyArticle.this);
         String resultJson = "";
 
         protected void onPreExecute() {
 //            progressDialog.setTitle("Please wait");
-//            progressDialog.setMessage("Loading");
-//            progressDialog.show();
+            progressDialog.setMessage("Загрузка");
+            progressDialog.show();
 
         }
 
@@ -157,7 +158,7 @@ public class MyArticle extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-//            progressDialog.dismiss();
+            progressDialog.dismiss();
         }
 
     }
