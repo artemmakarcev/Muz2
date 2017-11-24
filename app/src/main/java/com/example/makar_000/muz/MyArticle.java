@@ -5,10 +5,12 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,15 +29,18 @@ import java.net.URL;
 public class MyArticle extends AppCompatActivity {
 
     String intentId;
-    TextView textHtml;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_article);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -43,19 +48,11 @@ public class MyArticle extends AppCompatActivity {
 //        intentId = intent.getIntExtra("itemIndex", 1);
             intentId = extras.getString("id", "1");
 
-//            toolbar.setTitle(extras.getString("nameTitle"));
-//            toolbar.setSubtitle("title");
-
-
             Log.i("test", String.valueOf(extras.getString("id", "1")));
             Log.i("test", String.valueOf(extras.getString("nameTitle", "Статья")));
 
             TextView textHtml = (TextView) findViewById(R.id.textHtml);
-            TextView nameArticle = (TextView) findViewById(R.id.nameArticle);
-
-            nameArticle.setText(extras.getString("nameTitle"));
-
-//            textHtml.setText(extras.getString("id", "1") + " | " + extras.getString("urlImage", "2"));
+            toolbar.setTitle(extras.getString("nameTitle", "Ошибка загрузки"));
 
             new GetClass().execute();
         }
@@ -81,14 +78,24 @@ public class MyArticle extends AppCompatActivity {
 //        });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class GetClass extends AsyncTask<String, Void, String> {
 
-                ProgressDialog progressDialog = new ProgressDialog(MyArticle.this);
+        ProgressDialog progressDialog = new ProgressDialog(MyArticle.this);
         String resultJson = "";
 
         protected void onPreExecute() {
-//            progressDialog.setTitle("Please wait");
             progressDialog.setMessage("Загрузка");
             progressDialog.show();
 
@@ -137,27 +144,17 @@ public class MyArticle extends AppCompatActivity {
             try {
                 JSONObject jsonAll;
                 jsonAll = new JSONObject(strJson);
-
                 String text = jsonAll.getString("text");
-
                 Log.i("JSON", text);
-
                 TextView textHtml = (TextView) findViewById(R.id.textHtml);
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     textHtml.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
                 } else {
                     textHtml.setText(Html.fromHtml(text));
                 }
-
-
-//                textHtml.setText("123");
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             progressDialog.dismiss();
         }
 

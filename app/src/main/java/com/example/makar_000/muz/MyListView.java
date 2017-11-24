@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,7 +69,6 @@ public class MyListView extends AppCompatActivity {
         }
 
 
-        // По клику будем выводить текст элемента
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -91,13 +89,11 @@ public class MyListView extends AppCompatActivity {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
-        //Настраиваем иконки, можете выбрать другие или добавить свои (мне лень):
 //        alertDialog.setIcon((status) ? R.drawable.ic_launcher : R.drawable.ic_launcher);
         alertDialog.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                new GetClass().execute();
                 finish();
             }
         });
@@ -148,7 +144,6 @@ public class MyListView extends AppCompatActivity {
             try {
 
                 URL url = new URL("http://itmuseum.shspu.ru/api/getArticles.php");
-//
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.connect();

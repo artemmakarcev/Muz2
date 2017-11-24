@@ -38,6 +38,7 @@ public class MyAdapter extends ArrayAdapter<String> {
     String getUrlImage(int position) {
         return data.get(position).getImage();
     }
+
     String getNameTitle(int position) {
         return data.get(position).getTitle();
     }
@@ -47,7 +48,6 @@ public class MyAdapter extends ArrayAdapter<String> {
         return position;
     }
 
-    // заполнение элементов списка
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -55,7 +55,6 @@ public class MyAdapter extends ArrayAdapter<String> {
         assert inflater != null;
         @SuppressLint("ViewHolder") View view = inflater.inflate(R.layout.my_listview, parent, false);
 
-        // проставляем данные для элементов
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView type = (TextView) view.findViewById(R.id.type);
         TextView description = (TextView) view.findViewById(R.id.description);
@@ -63,11 +62,9 @@ public class MyAdapter extends ArrayAdapter<String> {
 
         ObjectItem objectItem = data.get(position);
 
-        // устанавливаем значения компонентам одного эелемента списка
         title.setText(objectItem.getTitle());
         type.setText(objectItem.getCategory());
         description.setText(objectItem.getDescription());
-//        imageArticle.setImageBitmap();
 
         Picasso.with(context)
                 .load("http://itmuseum.shspu.ru/images/article/thumbnail/" + objectItem.getImage())
