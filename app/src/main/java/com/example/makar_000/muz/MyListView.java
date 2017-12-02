@@ -35,7 +35,7 @@ public class MyListView extends AppCompatActivity {
     ConnectionDetector cd;
     Boolean isInternetPresent = false;
     private MyAdapter adapter;
-    private ArrayList<ObjectItem> objectItems = new ArrayList<>();
+    private ArrayList<ObjectItem> objectItems = new ArrayList<ObjectItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

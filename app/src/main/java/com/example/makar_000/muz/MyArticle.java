@@ -147,11 +147,11 @@ public class MyArticle extends AppCompatActivity {
                 String text = jsonAll.getString("text");
                 Log.i("JSON", text);
                 TextView textHtml = (TextView) findViewById(R.id.textHtml);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    textHtml.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
-                } else {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                    textHtml.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
+//                } else {
                     textHtml.setText(Html.fromHtml(text));
-                }
+//                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
